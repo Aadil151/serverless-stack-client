@@ -6,6 +6,7 @@ import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import config from "../config";
 import "./Notes.css";
+import { s3Upload } from "../libs/awsLib";
 
 //gets the notes and attachments from the database and renders it
 
@@ -55,6 +56,12 @@ export default function Notes() {
   function handleFileChange(event) {
     file.current = event.target.files[0];
   }
+
+  function saveNote(note) {
+    return API.put("notes", `/notes/${id}`,{
+        body: note
+    });
+  }
   
   async function handleSubmit(event) {
     let attachment;
@@ -70,6 +77,30 @@ export default function Notes() {
     }
   
     setIsLoading(true);
+
+    try {
+        if(file.current){
+            attachment = await s3Upload(file.current);
+        }
+
+        await saveNote({
+            content,
+            attachment: attachment || note.attachment
+        });
+
+        // delete the old note after saving the new one
+
+        if(note.attachment && attachment !== note.attachment){
+            await Storage.vault.remove(note.attachment);
+        }
+
+        history.push("/");
+    } catch (e) {
+        onError(e);
+        setIsLoading(false);
+    }
+
+
   }
   
   async function handleDelete(event) {
