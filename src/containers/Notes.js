@@ -9,6 +9,7 @@ import "./Notes.css";
 import { s3Upload } from "../libs/awsLib";
 
 //gets the notes and attachments from the database and renders it
+// can edit, save and delete notes
 
 export default function Notes() {
 
@@ -102,6 +103,10 @@ export default function Notes() {
 
 
   }
+
+  function deleteNote(){
+    return API.del("notes",`/notes/${id}`);
+  }
   
   async function handleDelete(event) {
     event.preventDefault();
@@ -115,6 +120,15 @@ export default function Notes() {
     }
   
     setIsDeleting(true);
+
+    try {
+      await deleteNote();
+      history.push("/");
+    } catch (e) {
+      onError(e);
+      history.push("/");
+    }
+
   }
   
   return (
