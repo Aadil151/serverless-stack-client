@@ -14,6 +14,7 @@ const config = {
       IDENTITY_POOL_ID: "us-east-1:5e30bf1a-e4b2-4256-a130-fff78e90b0f4",
     },
     MAX_ATTACHMENT_SIZE: 5000000,
+    STRIPE_KEY: "pk_test_51MHvlgFT3ayNn7UmHACwL149UqpqOw9cYT0HO0Pdq9HAtONGmXqvQToniZWihu0XqOCyazMQBHoG2gpKpQeaCc1z00grwjJ0hm",
   };
   
   export default config;
